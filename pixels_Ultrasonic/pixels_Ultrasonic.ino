@@ -5,6 +5,12 @@ Adafruit_AMG88xx amg;
 
 float pixels[AMG88xx_PIXEL_ARRAY_SIZE];
 
+#include <Array.h>
+const byte size = 10;
+int rawArray[size] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+Array<int> array = Array<int>(rawArray, size);
+Array<float> arrayPixels = Array<float>(pixels, 64);
+
 //ULTRASONIC----------------------------
 const int pingPin = 13;
 int inPin = 12;
@@ -45,15 +51,8 @@ void loop() {
      Serial.println();
   */
 
-  //FINDING HIGH
-  float maxTemp = 0;
-  for (int j = 1; j <= AMG88xx_PIXEL_ARRAY_SIZE; j++) {
-    float nowTemp = pixels[j];
-    float previousTemp = pixels[j - 1];
-    if (nowTemp >= previousTemp) {
-      maxTemp = nowTemp;
-    }
-  }
+
+  float thermisterTemp = amg.readThermistor();
 
   //ULTRASOINC---------------------------------------------------
   long duration, cm;
@@ -76,25 +75,20 @@ void loop() {
 
 
   //MAIN FUNCTION-----------------------------------------
+
   /*
     maxTemp = maxTemp + 7.5;
     Serial.println(maxTemp);
   */
 
 
-  if (cm >= 70 && cm <= 90) {
-    //CALIBRATE HERE
-    //maxTemp = (6.509*pow(maxTemp,3))-(545.54*pow(maxTemp,2))+(15087*maxTemp)-137865;
-    //maxTemp = (-2.3746*maxTemp)+104;
-    maxTemp = maxTemp + 9.5;
-
-    if (maxTemp >= 37.5) {
-      Serial.println("High");
+  if (cm >= 70) {
+    Serial.print(arrayPixels.getMax());
+    Serial.println();
+    if (arrayPixels.getMax() >= 37.5) {
+      Serial.print("High");
+      Serial.println();
     }
-    else {
-      Serial.println(maxTemp);
-    }
-
   }
   else {
     Serial.print("Error: out of range at: ");
