@@ -1,7 +1,6 @@
 //AMG---------------------------------
 #include <Wire.h>
 #include <Adafruit_AMG88xx.h>
-#include <Array.h>
 Adafruit_AMG88xx amg;
 
 float pixels[AMG88xx_PIXEL_ARRAY_SIZE];
@@ -81,11 +80,13 @@ void loop() {
     maxTemp = maxTemp + 7.5;
     Serial.println(maxTemp);
   */
+
+
   if (cm >= 70 && cm <= 90) {
     //CALIBRATE HERE
     //maxTemp = (6.509*pow(maxTemp,3))-(545.54*pow(maxTemp,2))+(15087*maxTemp)-137865;
     //maxTemp = (-2.3746*maxTemp)+104;
-    maxTemp = maxTemp + 7.5;
+    maxTemp = maxTemp + 9.5;
 
     if (maxTemp >= 37.5) {
       Serial.println("High");
@@ -100,6 +101,7 @@ void loop() {
     Serial.print(cm);
     Serial.println(" cm");
   }
+
 
   delay(1000);
 }
